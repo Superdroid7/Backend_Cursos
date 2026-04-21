@@ -1,0 +1,50 @@
+# ========================
+# Gradle
+# ========================
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# ========================
+# IntelliJ IDEA
+# ========================
+#.idea/
+#*.iws
+#*.iml
+#*.ipr
+#out/
+#!**/src/main/**/out/
+#!**/src/test/**/out/
+
+# ========================
+# VS Code
+# ========================
+.vscode/
+
+# ========================
+# OS
+# ========================
+.DS_Store
+Thumbs.db
+
+# ========================
+# Logs
+# ========================
+*.log
+
+# ========================
+# APUNTES (NO subir al repo)
+# Solo son archivos de estudio personal.
+# ========================
+ANOTACIONES_SPRING.html
+CODIGO_Y_LOGICA.html
+DISCURSO_PROYECTO.html
+GITFLOW_APUNTES.html
+DOCUMENTACION_PROYECTO.html
+DEFINICIONES_PROYECTO.html
+GUIA_EJECUCION_Y_GITHUB.md
+GUIA_EXPOSICION.html
+APUNTES_BACKEND.html
+*.apuntes.html
