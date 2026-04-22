@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎮 Guía Interactiva: Swagger UI</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
+
+    :root {
+      --bg: #090b14;
+      --surface: #121524;
+      --surface2: #1e2238;
+      --accent: #00e676;
+      --accent-glow: rgba(0, 230, 118, 0.3);
+      --accent2: #2979ff;
+      --warn: #ff3d00;
+      --text: #e8eaf0;
+      --muted: #8b8fa8;
+      --border: #2c324f;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 3rem 1rem;
+      line-height: 1.6;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+    header h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 20px var(--accent-glow);
+    }
+    header p {
+      color: var(--muted);
+      margin-top: .75rem;
+      font-size: 1rem;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* CARDS */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px; height: 100%;
+      background: linear-gradient(to bottom, var(--accent), var(--accent2));
+    }
+
+    .card h2 {
+      font-size: 1.4rem;
+      margin-bottom: 1.25rem;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .card h2 span {
+      background: var(--surface2);
+      padding: 0.25rem 0.6rem;
+      border-radius: 8px;
+      color: var(--accent);
+      font-size: 1rem;
+    }
+
+    /* LISTAS PASO A PASO */
+    .step-list {
+      list-style: none;
+      counter-reset: my-counter;
+      margin-top: 1rem;
+    }
+    .step-list li {
+      counter-increment: my-counter;
+      position: relative;
+      padding-left: 3.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .step-list li::before {
+      content: counter(my-counter);
+      position: absolute;
+      left: 0; top: -0.2rem;
+      width: 2.2rem; height: 2.2rem;
+      background: var(--surface2);
+      color: var(--accent);
+      font-weight: 700;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--accent);
+      box-shadow: 0 0 10px var(--accent-glow);
+    }
+    .step-list h3 {
+      font-size: 1.1rem;
+      color: #fff;
+      margin-bottom: 0.35rem;
+    }
+    .step-list p {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    /* CÓDIGO */
+    .code-block {
+      background: #000;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.5rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9rem;
+      color: #a5b4fc;
+      margin-top: 0.75rem;
+      overflow-x: auto;
+    }
+    .code-block .keyword { color: #fbbf24; }
+
+    /* ANALOGÍA */
+    .analogy-box {
+      background: rgba(41, 121, 255, 0.1);
+      border: 1px solid rgba(41, 121, 255, 0.3);
+      border-left: 4px solid var(--accent2);
+      padding: 1.25rem;
+      border-radius: 0 8px 8px 0;
+      margin-top: 1.5rem;
+      font-style: italic;
+      color: #bfdbfe;
+    }
+    .analogy-title {
+      font-weight: 700;
+      font-style: normal;
+      color: var(--accent2);
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    /* DEFINICIONES TÉCNICAS */
+    .tech-def {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 1.5rem;
+      background: var(--surface2);
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      align-items: start;
+    }
+    .tech-def-term {
+      font-family: 'Fira Code', monospace;
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 1.1rem;
+    }
+    .tech-def-desc {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    
+    @media (max-width: 600px) {
+      .tech-def { grid-template-columns: 1fr; gap: 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>El Bestiario de la API</h1>
+  <p>Guía de uso para descubrir, probar e inspeccionar la magia de Swagger UI</p>
+</header>
+
+<div class="container">
+
+  <!-- SECCIÓN 1: ¿CÓMO FUNCIONA? -->
+  <div class="card">
+    <h2><span>⚙️</span> El Motor: ¿Cómo funciona Swagger de forma automática?</h2>
+    <p>A diferencia de tener que escribir documentos de Word manuales sobre cómo funciona tu API, en este proyecto hemos implementado la librería <strong>Springdoc OpenAPI</strong>. Esto funciona como un escáner en tiempo real.</p>
+    
+    <div class="analogy-box">
+      <span class="analogy-title">🗡️ The Legend of Zelda: La Piedra Sheikah</span>
+      Imagina que la librería Springdoc es el escáner de la Piedra Sheikah. Apenas enciendes tu proyecto, el escáner recorre todas tus clases buscando la marca de la Trifuerza (las anotaciones de Spring). En cuanto encuentra un Controlador, escanea qué recibe y qué responde, y automáticamente dibuja un mapa perfecto de todos tus endpoints en un pergamino digital (Swagger UI). ¡Cero esfuerzo manual!
+    </div>
+
+    <h3 style="margin: 2rem 0 1rem; color: #fff;">Diccionario de Anotaciones Clave</h3>
+    
+    <div class="tech-def">
+      <div class="tech-def-term">@Tag</div>
+      <div class="tech-def-desc">
+        Se coloca encima de los Controladores (ej. <code>CourseController</code>). Sirve para ponerle un "título" o "etiqueta" a un grupo de endpoints. Así, en la página web, todos los métodos relacionados a cursos aparecen bajo el menú "Courses".
+      </div>
+    </div>
+
+    <div class="tech-def">
+      <div class="tech-def-term">@Operation</div>
+      <div class="tech-def-desc">
+        Se coloca justo encima de un endpoint (ej. <code>@GetMapping</code>). Sirve para describir qué hace ese método específico. Por ejemplo: <em>"summary = 'Crear curso', description = 'Guarda un nuevo curso en la BD'"</em>.
+      </div>
+    </div>
+
+    <div class="tech-def">
+      <div class="tech-def-term">@Schema</div>
+      <div class="tech-def-desc">
+        Se coloca en los campos de los DTOs (ej. en <code>CourseRequest</code> encima del título o imagen). Le enseña al frontend qué datos exactos esperar y da un ejemplo visual en la interfaz gráfica.
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 2: EJECUCIÓN -->
+  <div class="card">
+    <h2><span>▶️</span> Paso a Paso: Invocando la Interfaz</h2>
+    <p>Para ver tu documentación en vivo, solo necesitas arrancar tu servidor (el backend). Sigue estos pasos exactos:</p>
+
+    <ol class="step-list">
+      <li>
+        <h3>Levantar el Servidor (BootRun)</h3>
+        <p>Abre la terminal de tu IntelliJ o de tu computadora en la ruta del proyecto y ejecuta el siguiente comando mágico de Gradle:</p>
+        <div class="code-block">
+          <span class="keyword">.\gradlew.bat</span> bootRun
+        </div>
+        <p style="margin-top: 0.5rem; font-size: 0.85rem; color: #6b7280;"><em>Si prefieres no usar la consola, simplemente presiona el botón verde de "Play" arriba a la derecha en tu IntelliJ.</em></p>
+      </li>
+      
+      <li>
+        <h3>Esperar la Carga Inicial</h3>
+        <p>No te asustes si la barra de la consola se queda en <strong>80% EXECUTING</strong>. ¡Esto es el éxito! El 80% indica que tu aplicación se construyó correctamente y tu servidor Apache Tomcat ahora está esperando peticiones en el puerto 8080 de forma infinita.</p>
+      </li>
+
+      <li>
+        <h3>Abrir el Bestiario (Navegador)</h3>
+        <p>Abre tu navegador favorito y escribe el siguiente enlace. Este es el portal hacia tu documentación interactiva generada al vuelo:</p>
+        <div class="code-block" style="border-color: var(--accent); color: #fff;">
+          http://localhost:8080/swagger-ui.html
+        </div>
+      </li>
+    </ol>
+  </div>
+
+  <!-- SECCIÓN 3: CÓMO PROBAR -->
+  <div class="card">
+    <h2><span>🧪</span> Pruebas en Vivo (Try it out)</h2>
+    <p>Una vez dentro de la pantalla de Swagger, verás listados tus métodos <code>GET</code> y <code>POST</code>. Lo genial de esto es que no es solo lectura; puedes interactuar con ellos sin usar Postman.</p>
+
+    <div class="analogy-box">
+      <span class="analogy-title">🔥 Dark Souls: La Hoguera de Prueba</span>
+      En lugar de ir directamente al jefe final (el frontend) para ver si tus rutas funcionan, puedes descansar en esta hoguera y probar tus armas. Le pasas un JSON de prueba a tu espada (endpoint POST), la usas, y ves inmediatamente cuánto daño hiciste (el Status Code 200 OK y el JSON de respuesta).
+    </div>
+
+    <ul style="margin-top: 1.5rem; margin-left: 1.5rem; color: var(--muted);">
+      <li style="margin-bottom: 0.75rem;">Haz clic en el bloque verde del método <strong>POST /api/courses</strong>.</li>
+      <li style="margin-bottom: 0.75rem;">A la derecha verás un botón que dice <strong>"Try it out"</strong>. Haz clic ahí.</li>
+      <li style="margin-bottom: 0.75rem;">El campo <code>Request body</code> se volverá editable. Ingresa los datos del nuevo curso (themes, link, titulo, etc.).</li>
+      <li>Presiona el botón azul gigante <strong>"Execute"</strong>. ¡Boom! Petición enviada. Baja un poco y verás la respuesta de tu propio servidor.</li>
+    </ul>
+  </div>
+
+</div>
+
+</body>
+</html>
