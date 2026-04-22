@@ -21,4 +21,6 @@ public class Course {
     private final String description;
     private final CourseCategory category;
     private final String imageUrl;
+    private final String themes;
+    private final String link;
 }

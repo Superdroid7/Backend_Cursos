@@ -41,4 +41,9 @@ public interface CourseUseCase {
      * Retorna un curso por su ID único.
      */
     Optional<Course> findById(Long id);
+
+    /**
+     * Crea un nuevo curso.
+     */
+    Course createCourse(Course course);
 }

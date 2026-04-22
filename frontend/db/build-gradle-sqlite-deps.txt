@@ -1,0 +1,25 @@
+// ============================================================
+//  DEPENDENCIAS PARA SQLITE — fragmento para build.gradle
+//  Agrega estas líneas al bloque dependencies { ... }
+//  del build.gradle principal del proyecto.
+// ============================================================
+
+dependencies {
+    // ── Existentes ────────────────────────────────────────
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // ── NUEVAS: SQLite + JPA ───────────────────────────────
+
+    // Spring Data JPA (incluye Hibernate)
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // Driver JDBC de SQLite
+    implementation 'org.xerial:sqlite-jdbc:3.45.3.0'
+
+    // Dialecto de Hibernate para SQLite
+    // (hibernate-community-dialects cubre SQLiteDialect desde Hibernate 6)
+    implementation 'org.hibernate.orm:hibernate-community-dialects:6.4.4.Final'
+}
