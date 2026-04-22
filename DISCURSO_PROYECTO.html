@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discurso del Proyecto</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
+
+    :root {
+      --bg: #09090f;
+      --surface: #12131e;
+      --surface2: #191b2b;
+      --accent: #818cf8;
+      --accent2: #34d399;
+      --gold: #fbbf24;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --border: #1e2138;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.8;
+    }
+
+    /* HERO */
+    .hero {
+      background: radial-gradient(ellipse at 50% 0%, #1e1b4b 0%, #09090f 70%);
+      text-align: center;
+      padding: 5rem 2rem 4rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero .tag {
+      display: inline-block;
+      background: #1e2040;
+      color: var(--accent);
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: .35rem .9rem;
+      border-radius: 99px;
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      background: linear-gradient(135deg, #818cf8 0%, #34d399 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1rem;
+    }
+    .hero p {
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 580px;
+      margin: 0 auto;
+    }
+
+    /* MAIN */
+    main {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem;
+    }
+
+    /* SECTION */
+    .chapter {
+      margin-bottom: 4rem;
+    }
+    .chapter-label {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      font-size: .72rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      margin-bottom: 1.25rem;
+    }
+    .chapter-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .chapter h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+      color: var(--text);
+    }
+    .chapter p {
+      font-family: 'Lora', serif;
+      font-size: 1rem;
+      color: #cbd5e1;
+      margin-bottom: 1rem;
+      line-height: 1.85;
+    }
+    .chapter p em {
+      color: var(--accent2);
+      font-style: normal;
+      font-weight: 600;
+    }
+
+    /* HIGHLIGHT BOX */
+    .highlight {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: 0 10px 10px 0;
+      padding: 1.25rem 1.5rem;
+      margin: 1.5rem 0;
+      font-family: 'Lora', serif;
+      font-size: .97rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+    .highlight strong { color: var(--accent); font-style: normal; }
+
+    /* TIMELINE */
+    .timeline {
+      position: relative;
+      padding-left: 2rem;
+      margin-top: 1.5rem;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: .55rem;
+      top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--accent), var(--accent2));
+      border-radius: 2px;
+    }
+    .tl-item {
+      position: relative;
+      margin-bottom: 1.75rem;
+    }
+    .tl-item::before {
+      content: '';
+      position: absolute;
+      left: -1.57rem;
+      top: .4rem;
+      width: 10px; height: 10px;
+      background: var(--accent2);
+      border-radius: 50%;
+      border: 2px solid var(--bg);
+    }
+    .tl-step {
+      font-size: .72rem;
+      font-weight: 700;
+      color: var(--accent2);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: .3rem;
+    }
+    .tl-title {
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--text);
+      margin-bottom: .35rem;
+    }
+    .tl-desc {
+      font-family: 'Lora', serif;
+      font-size: .88rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* ENDPOINT LIST */
+    .endpoints {
+      display: flex;
+      flex-direction: column;
+      gap: .6rem;
+      margin: 1rem 0;
+    }
+    .ep {
+      display: flex;
+      align-items: flex-start;
+      gap: .75rem;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: .75rem 1rem;
+      font-size: .875rem;
+    }
+    .ep .method {
+      font-weight: 700;
+      color: var(--accent2);
+      font-family: monospace;
+      min-width: 3rem;
+    }
+    .ep .path {
+      font-family: monospace;
+      color: var(--accent);
+      flex: 1;
+    }
+    .ep .ep-desc { color: var(--muted); font-size: .8rem; }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <span class="tag">📋 Discurso del Proyecto</span>
+  <h1>Course Catalog API</h1>
+  <p>Entiende qué hace, por qué existe y cómo se construyó — en menos de 5 minutos.</p>
+</div>
+
+<main>
+
+  <!-- ── A: CÓMO FUNCIONA ── -->
+  <section class="chapter">
+    <div class="chapter-label">A · Cómo funciona</div>
+    <h2>¿Qué pasa cuando el frontend pide cursos?</h2>
+
+    <p>El frontend Angular hace una petición HTTP GET a <em>http://localhost:8080/api/courses</em>. El backend la recibe, la procesa y responde con una lista de cursos en formato JSON.</p>
+
+    <p>El flujo interno es sencillo: la petición entra al <em>CourseController</em>, que toma los parámetros opcionales (<code>search</code> y <code>category</code>), los pasa al <em>CourseUseCase</em> (la interfaz del dominio), y el <em>CourseService</em> aplica la lógica de filtrado combinando ambos criterios. Finalmente, el resultado se convierte en DTOs (<em>CourseResponse</em>) y se serializa como JSON.</p>
+    
+    <p>Adicionalmente, se ha integrado la funcionalidad de creación. Mediante una petición <code>POST</code> se puede enviar un curso nuevo (con título, descripción, categoría, temas/lenguajes, URL de imagen y un enlace). Esto pasa por un DTO (<em>CourseRequest</em>), es validado por el dominio y almacenado en el repositorio.</p>
+
+    <div class="highlight">
+      <strong>En una frase:</strong> "El controller recibe, el servicio piensa, el repositorio guarda o busca, el DTO empaqueta y la respuesta viaja."
+    </div>
+
+    <p>Todo esto está documentado interactivamente con <strong>Swagger (Springdoc OpenAPI)</strong> en la ruta <code>/swagger-ui.html</code>. El sistema soporta estos endpoints:</p>
+
+    <div class="endpoints">
+      <div class="ep">
+        <span class="method">GET</span>
+        <div>
+          <div class="path">/api/courses</div>
+          <div class="ep-desc">Todos los cursos sin filtro</div>
+        </div>
+      </div>
+      <div class="ep">
+        <span class="method">GET</span>
+        <div>
+          <div class="path">/api/courses?search=python</div>
+          <div class="ep-desc">Búsqueda por palabra clave en título o descripción</div>
+        </div>
+      </div>
+      <div class="ep">
+        <span class="method">GET</span>
+        <div>
+          <div class="path">/api/courses?category=CLOUD</div>
+          <div class="ep-desc">Filtro por categoría (PROGRAMMING, DESIGN, CLOUD, TESTING)</div>
+        </div>
+      </div>
+      <div class="ep">
+        <span class="method">GET</span>
+        <div>
+          <div class="path">/api/courses?search=docker&category=PROGRAMMING</div>
+          <div class="ep-desc">Búsqueda combinada: keyword + categoría</div>
+        </div>
+      </div>
+      <div class="ep">
+        <span class="method">GET</span>
+        <div>
+          <div class="path">/api/courses/{id}</div>
+          <div class="ep-desc">Curso específico por ID (ej: /api/courses/3)</div>
+        </div>
+      </div>
+      <div class="ep">
+        <span style="color: var(--accent); font-weight: bold; font-family: monospace; min-width: 3rem;">POST</span>
+        <div>
+          <div class="path">/api/courses</div>
+          <div class="ep-desc">Creación de un nuevo curso con temas (themes) y enlace (link)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── B: POR QUÉ SE HIZO ── -->
+  <section class="chapter">
+    <div class="chapter-label">B · Por qué se hizo y su propósito</div>
+    <h2>El problema que resuelve</h2>
+
+    <p>El frontend del catálogo de cursos existía solo como HTML y CSS estáticos. Mostraba tarjetas de cursos hardcodeadas directamente en el markup — sin búsqueda real, sin filtros, sin datos dinámicos.</p>
+
+    <p>El backend nació para <em>darle vida a ese frontend</em>. Ahora, en lugar de HTML estático, Angular puede consumir una API REST y mostrar los cursos dinámicamente, filtrando por categoría ("Programming", "Cloud", "Testing", "Diseño") o buscando por nombre.</p>
+
+    <div class="highlight">
+      <strong>Propósito técnico:</strong> Demostrar arquitectura hexagonal en un proyecto Java Spring Boot real, con separación estricta de capas, sin base de datos (datos en memoria para facilitar el desarrollo), y listo para escalar a PostgreSQL en el futuro sin cambiar una línea del dominio.
+    </div>
+
+    <p>Usar <em>arquitectura hexagonal</em> significa que el negocio (qué es un curso, qué se puede buscar) vive aislado del resto. Si mañana el cliente decide cambiar la base de datos, cambiar el framework web, o agregar una interfaz CLI — el dominio no se toca.</p>
+  </section>
+
+  <!-- ── C: ORDEN DE CONSTRUCCIÓN ── -->
+  <section class="chapter">
+    <div class="chapter-label">C · Orden de construcción</div>
+    <h2>Cómo se armó el proyecto paso a paso</h2>
+
+    <div class="timeline">
+
+      <div class="tl-item">
+        <div class="tl-step">Paso 1 — Proyecto base</div>
+        <div class="tl-title">build.gradle + settings.gradle + application.properties</div>
+        <div class="tl-desc">Se configuró Gradle con Groovy DSL, Spring Boot 3.2.5, Java 17 y Lombok. application.properties solo define el puerto (8080) — sin base de datos.</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-step">Paso 2 — Dominio</div>
+        <div class="tl-title">CourseCategory.java + Course.java</div>
+        <div class="tl-desc">Se definieron los objetos de negocio. El enum garantiza categorías válidas. La entidad Course incluye título, descripción, categoría, URL de imagen, temas cubiertos (themes) y enlace al curso (link). Es inmutable y se construye con Builder.</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-step">Paso 3 — Puertos</div>
+        <div class="tl-title">CourseUseCase.java + CourseRepositoryPort.java</div>
+        <div class="tl-desc">Los contratos del dominio. Dejan claro qué puede hacer el sistema (UseCase) y qué necesita del almacenamiento (RepositoryPort), sin comprometerse con ninguna tecnología.</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-step">Paso 4 — Lógica de negocio</div>
+        <div class="tl-title">CourseService.java</div>
+        <div class="tl-desc">La inteligencia del sistema. Implementa el UseCase: valida entradas, combina filtros de keyword y categoría, y delega la búsqueda al repositorio.</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-step">Paso 5 — Datos en memoria</div>
+        <div class="tl-title">InMemoryCourseRepository.java</div>
+        <div class="tl-desc">El adaptador de salida. Contiene la lista estática de 6 cursos (Learn Python, HTML/CSS, JavaScript, Docker, AWS, JUnit). Implementa CourseRepositoryPort con streams de Java.</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-step">Paso 6 — API REST y Swagger</div>
+        <div class="tl-title">CourseResponse/Request.java + CourseController.java</div>
+        <div class="tl-desc">Los DTOs definen el JSON de petición/respuesta. El controller expone los endpoints REST. Además, está integrado con Springdoc OpenAPI, generando documentación visual automática accesible en /swagger-ui.html.</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-step">Paso 7 — Configuración</div>
+        <div class="tl-title">BeanConfiguration.java + CorsConfig.java</div>
+        <div class="tl-desc">BeanConfiguration ensambla el repositorio + servicio sin contaminar el dominio con @Service. CorsConfig permite que Angular en localhost:4200 consuma la API sin bloqueos CORS.</div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explicación del Código y Lógica</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
+
+    :root {
+      --bg: #0d0f1a;
+      --surface: #141622;
+      --surface2: #1c1f30;
+      --accent: #7c3aed;
+      --accent2: #06b6d4;
+      --green: #10b981;
+      --red: #ef4444;
+      --yellow: #f59e0b;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --border: #1e2442;
+      --code-bg: #0f172a;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── TOP NAV ── */
+    nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 2rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: .82rem;
+      font-weight: 500;
+      padding: .3rem .7rem;
+      border-radius: 6px;
+      transition: background .15s, color .15s;
+    }
+    nav a:hover { background: var(--surface2); color: var(--text); }
+
+    /* ── LAYOUT ── */
+    main { max-width: 900px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+
+    header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    header p { color: var(--muted); margin-top: .5rem; font-size: .9rem; }
+
+    /* ── FILE BLOCK ── */
+    .file-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+
+    .file-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.5rem;
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      user-select: none;
+    }
+    .file-icon { font-size: 1.4rem; }
+    .file-name {
+      font-family: 'Fira Code', monospace;
+      font-size: .92rem;
+      color: var(--accent2);
+      flex: 1;
+    }
+    .file-layer {
+      font-size: .72rem;
+      font-weight: 600;
+      padding: .2rem .6rem;
+      border-radius: 99px;
+      text-transform: uppercase;
+    }
+    .layer-domain  { background: #2d1b69; color: #a78bfa; }
+    .layer-infra   { background: #064e3b; color: #34d399; }
+    .layer-config  { background: #78350f; color: #fbbf24; }
+    .layer-entry   { background: #1e1b4b; color: #818cf8; }
+
+    .file-body { padding: 1.5rem; }
+
+    /* ── SECCION ── */
+    .section-title {
+      font-size: .75rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      margin: 1.25rem 0 .5rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    p.desc { font-size: .875rem; color: var(--muted); line-height: 1.7; }
+
+    /* ── CODE SNIPPET ── */
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+      margin: .75rem 0;
+    }
+    code {
+      font-family: 'Fira Code', monospace;
+      font-size: .82rem;
+      color: #93c5fd;
+      line-height: 1.6;
+    }
+    code .kw  { color: #c084fc; }
+    code .str { color: #86efac; }
+    code .ann { color: #fb923c; }
+
+    /* ── ANALOGY CARD ── */
+    .analogy {
+      background: linear-gradient(135deg, #0f1629 0%, #1a0a2e 100%);
+      border: 1px solid #2d1b69;
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      margin-top: .75rem;
+      font-size: .855rem;
+      line-height: 1.65;
+      color: #c4b5fd;
+      position: relative;
+    }
+    .analogy-badge {
+      font-size: .7rem;
+      font-weight: 700;
+      color: #7c3aed;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: .35rem;
+      display: block;
+    }
+
+    /* ── CLASS DEF ── */
+    .class-def {
+      background: var(--surface2);
+      border-left: 3px solid var(--accent2);
+      border-radius: 0 8px 8px 0;
+      padding: .75rem 1rem;
+      margin: .5rem 0;
+      font-size: .855rem;
+      color: var(--text);
+    }
+    .class-def strong { color: var(--accent2); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="#main-class">CatalogApplication</a>
+  <a href="#course">Course</a>
+  <a href="#category">CourseCategory</a>
+  <a href="#usecase">CourseUseCase</a>
+  <a href="#repo-port">CourseRepositoryPort</a>
+  <a href="#service">CourseService</a>
+  <a href="#dto">CourseResponse</a>
+  <a href="#controller">CourseController</a>
+  <a href="#bean-config">BeanConfiguration</a>
+  <a href="#cors">CorsConfig</a>
+</nav>
+
+<main>
+  <header>
+    <h1>🧩 Explicación del Código y Lógica</h1>
+    <p>Cada archivo · qué hace · analogías con Silent Hill 2, Resident Evil & League of Legends</p>
+  </header>
+
+  <!-- ─── CatalogApplication ─── -->
+  <div class="file-block" id="main-class">
+    <div class="file-header">
+      <span class="file-icon">🚀</span>
+      <span class="file-name">CatalogApplication.java</span>
+      <span class="file-layer layer-entry">Entry Point</span>
+    </div>
+    <div class="file-body">
+      <div class="section-title">¿Qué hace?</div>
+      <p class="desc">Punto de entrada de la aplicación. Llama a <code>SpringApplication.run()</code> que arranca el contenedor IoC de Spring, registra todos los beans y levanta el servidor embebido Tomcat en el puerto 8080.</p>
+
+      <pre><code><span class="ann">@SpringBootApplication</span>
+<span class="kw">public class</span> CatalogApplication {
+    <span class="kw">public static void</span> main(String[] args) {
+        SpringApplication.run(CatalogApplication.class, args);
+    }
+}</code></pre>
+
+      <div class="section-title">🎮 Analogía</div>
+      <div class="analogy">
+        <span class="analogy-badge">🗺️ League of Legends</span>
+        Es el <strong>Nexo</strong>. Si el Nexo cae, todo el juego termina. Si esta clase no arranca, no existe el servidor. Es el corazón de toda la partida. <code>SpringApplication.run()</code> es el momento en que aparece la pantalla de carga y se inicializa el mapa.
+      </div>
+
+      <div class="section-title">📚 Definición de Clase</div>
+      <div class="class-def"><strong>Clase pública normal</strong> — No hereda de nada. Es la única que tiene <code>main(String[] args)</code>. La anotación <code>@SpringBootApplication</code> hace el trabajo pesado de configuración automática.</div>
+    </div>
+  </div>
+
+  <!-- ─── CourseCategory ─── -->
+  <div class="file-block" id="category">
+    <div class="file-header">
+      <span class="file-icon">🏷️</span>
+      <span class="file-name">CourseCategory.java</span>
+      <span class="file-layer layer-domain">Domain</span>
+    </div>
+    <div class="file-body">
+      <div class="section-title">¿Qué hace?</div>
+      <p class="desc">Define las categorías válidas de un curso. Al ser un <code>enum</code>, los únicos valores posibles son exactamente los listados: <code>PROGRAMMING</code>, <code>DESIGN</code>, <code>CLOUD</code>, <code>TESTING</code>. Imposible ingresar un dato inválido.</p>
+
+      <pre><code><span class="kw">public enum</span> CourseCategory {
+    PROGRAMMING, DESIGN, CLOUD, TESTING
+}</code></pre>
+
+      <div class="section-title">🎮 Analogía</div>
+      <div class="analogy">
+        <span class="analogy-badge">🧟 Resident Evil</span>
+        Es como el <strong>tipo de mutación del virus</strong>. Un zombie solo puede ser T-Virus, G-Virus, C-Virus o Plaga — no puede ser una mezcla aleatoria. El enum garantiza que ningún curso tenga una categoría inventada.
+      </div>
+
+      <div class="section-title">📚 Definición de Clase</div>
+      <div class="class-def"><strong>enum</strong> — Tipo especial de clase en Java. No se instancia con <code>new</code>. Sus valores son constantes predefinidas en tiempo de compilación. Mas seguro que usar Strings para representar estados o tipos.</div>
+    </div>
+  </div>
+
+  <!-- ─── Course ─── -->
+  <div class="file-block" id="course">
+    <div class="file-header">
+      <span class="file-icon">📘</span>
+      <span class="file-name">Course.java</span>
+      <span class="file-layer layer-domain">Domain</span>
+    </div>
+    <div class="file-body">
+      <div class="section-title">¿Qué hace?</div>
+      <p class="desc">Entidad central del dominio. Representa un curso con sus datos. Es <strong>inmutable</strong>: todos los campos son <code>final</code> y no hay setters. Se construye con el patrón Builder de Lombok.</p>
+
+      <pre><code><span class="ann">@Getter</span> <span class="ann">@Builder</span> <span class="ann">@AllArgsConstructor</span>
+<span class="kw">public class</span> Course {
+    <span class="kw">private final</span> Long id;
+    <span class="kw">private final</span> String title;
+    <span class="kw">private final</span> String description;
+    <span class="kw">private final</span> CourseCategory category;
+    <span class="kw">private final</span> String imageUrl;
+    <span class="kw">private final</span> String themes;
+    <span class="kw">private final</span> String link;
+}</code></pre>
+
+      <div class="section-title">🎮 Analogía</div>
+      <div class="analogy">
+        <span class="analogy-badge">👤 Silent Hill 2</span>
+        James Sunderland busca a su esposa en la niebla. <strong>James es inmutable</strong>: sus memorias y su identidad no cambian durante su viaje por el pueblo (el dominio). Nadie desde afuera puede modificar quién es. Solo puede ser "leído" — igual que nuestro objeto <code>Course</code>.
+      </div>
+
+      <div class="section-title">📚 Definición de Clase</div>
+      <div class="class-def"><strong>Clase POJO inmutable con Builder</strong> — <code>@Getter</code> genera los getX(), <code>@Builder</code> genera el patrón builder, <code>@AllArgsConstructor</code> genera el constructor necesario para Builder + campos final. Sin setters = objeto inmutable = thread-safe.</div>
+    </div>
+  </div>
+
+  <!-- ─── CourseUseCase ─── -->
+  <div class="file-block" id="usecase">
+    <div class="file-header">
+      <span class="file-icon">🔌</span>
+      <span class="file-name">CourseUseCase.java — Puerto de Entrada</span>
+      <span class="file-layer layer-domain">Domain</span>
+    </div>
+    <div class="file-body">
+      <div class="section-title">¿Qué hace?</div>
+      <p class="desc">Interfaz que define los casos de uso disponibles. El controller SOLO puede hablar con el dominio a través de esta interfaz. Garantiza que la capa web no acceda directamente al servicio.</p>
+
+      <pre><code><span class="kw">public interface</span> CourseUseCase {
+    List&lt;Course&gt; findAll();
+    List&lt;Course&gt; search(String keyword, CourseCategory category);
+    Optional&lt;Course&gt; findById(Long id);
+    Course createCourse(Course course);
+    <span class="str">// + searchByKeyword / filterByCategory</span>
+}</code></pre>
+
+      <div class="section-title">🎮 Analogía</div>
+      <div class="analogy">
+        <span class="analogy-badge">🎯 League of Legends</span>
+        Es el <strong>libro de habilidades de un campeón</strong>. Define CUÁLES habilidades existen (Q, W, E, R), pero no CÓMO se ejecutan internamente. El jugador (controller) solo ve el libro. El código real de la habilidad (CourseService) está encapsulado.
+      </div>
+
+      <div class="section-title">📚 Definición de Clase</div>
+      <div class="class-def"><strong>interface</strong> — Contrato puro. Solo define firmas de métodos. No tiene implementación. Permite el principio D de SOLID (Dependency Inversion): depender de abstracciones, no de concretos.</div>
+    </div>
+  </div>
+
+  <!-- ─── CourseRepositoryPort ─── -->
+  <div class="file-block" id="repo-port">
+    <div class="file-header">
+      <span class="file-icon">🔌</span>
+      <span class="file-name">CourseRepositoryPort.java — Puerto de Salida</span>
+      <span class="file-layer layer-domain">Domain</span>
+    </div>
+    <div class="file-body">
+      <div class="section-title">¿Qué hace?</div>
+      <p class="desc">El dominio define QUÉ necesita del almacenamiento sin saber si es una base de datos, un archivo, o datos en memoria. La implementación concreta (<code>InMemoryCourseRepository</code>) vive en infraestructura.</p>
+
+      <pre><code><span class="kw">public interface</span> CourseRepositoryPort {
+    List&lt;Course&gt; findAll();
+    List&lt;Course&gt; findByKeyword(String keyword);
+    List&lt;Course&gt; findByCategory(CourseCategory category);
+    Optional&lt;Course&gt; findById(Long id);
+    Course save(Course course);
+}</code></pre>
+
+      <div class="section-title">🎮 Analogía</div>
+      <div class="analogy">
+        <span class="analogy-badge">🧪 Resident Evil — Umbrella Corp</span>
+        Umbrella necesita "muestras biológicas" pero no le importa si vienen del laboratorio de Raccoon City, de la Antártida o de un laboratorio secreto. El <strong>puerto de salida es la orden de pedido de muestras</strong>. Quién las entrega (el adaptador) es un detalle de implementación.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── CourseService ─── -->
+  <div class="file-block" id="service">
+    <div class="file-header">
+      <span class="file-icon">⚙️</span>
+      <span class="file-name">CourseService.java</span>
+      <span class="file-layer layer-domain">Domain</span>
+    </div>
+    <div class="file-body">
+      <div class="section-title">¿Qué hace?</div>
+      <p class="desc">Implementa <code>CourseUseCase</code>. Contiene la lógica de negocio real: combinar búsqueda por keyword y por categoría, validar entradas nulas, delegar al repositorio. <strong>Sin anotaciones de Spring</strong> — es Java puro.</p>
+
+      <pre><code><span class="ann">@RequiredArgsConstructor</span>
+<span class="kw">public class</span> CourseService <span class="kw">implements</span> CourseUseCase {
+
+    <span class="kw">private final</span> CourseRepositoryPort courseRepositoryPort;
+
+    <span class="kw">public</span> List&lt;Course&gt; search(String keyword, CourseCategory category) {
+        <span class="str">// Si no hay filtros → todos los cursos</span>
+        <span class="str">// Si hay keyword → filtra por título/descripción</span>
+        <span class="str">// Si hay category → filtra el resultado anterior</span>
+    }
+}</code></pre>
+
+      <div class="section-title">🎮 Analogía</div>
+      <div class="analogy">
+        <span class="analogy-badge">⚔️ Silent Hill 2 — Pyramid Head</span>
+        Pyramid Head es la <strong>lógica implacable</strong> del pueblo. Ejecuta las reglas sin importar lo que pase afuera. El servicio es igual: aplica las reglas de negocio (si no hay keyword devuelve todo, si hay categoría filtra) sin importar si la llamada viene de HTTP, de tests, o de un CLI.
+      </div>
+
+      <div class="section-title">📚 Definición de Clase</div>
+      <div class="class-def"><strong>Clase de servicio de dominio</strong> — Implementa una interfaz (CourseUseCase) e inyecta otra (CourseRepositoryPort) por constructor. No tiene <code>@Service</code> porque eso acoplaría el dominio a Spring. El framework solo entra en <code>BeanConfiguration</code>.</div>
+    </div>
+  </div>
+
+  <!-- ─── CourseResponse ─── -->
+  <div class="file-block" id="dto">
+    <div class="file-header">
+      <span class="file-icon">📤</span>
+      <span class="file-name">CourseResponse.java y CourseRequest.java — DTOs</span>
+      <span class="file-layer layer-infra">Infra</span>
+    </div>
+    <div class="file-body">
+      <div class="section-title">¿Qué hace?</div>
+      <p class="desc">Data Transfer Objects: el JSON que el frontend recibe y envía. <code>CourseRequest</code> agrupa los datos para crear un curso, mientras <code>CourseResponse</code> es lo que se devuelve. Están anotados con <code>@Schema</code> para autogenerar la documentación de Swagger.</p>
+
+      <pre><code><span class="ann">@Getter</span> <span class="ann">@Builder</span>
+<span class="kw">public class</span> CourseResponse {
+    <span class="kw">private</span> Long id;
+    <span class="kw">private</span> String title, description, category, imageUrl;
+
+    <span class="kw">public static</span> CourseResponse fromDomain(Course c) {
+        <span class="kw">return</span> CourseResponse.builder()
+            .id(c.getId())
+            .category(c.getCategory().name()) <span class="str">// enum → String</span>
+            .build();
+    }
+}</code></pre>
+
+      <div class="section-title">🎮 Analogía</div>
+      <div class="analogy">
+        <span class="analogy-badge">🎮 League of Legends — Interfaz del juego</span>
+        El modelo interno del campeón tiene 50 atributos internos. Pero la <strong>interfaz que el jugador ve</strong> (barra de vida, daño, habilidades) solo muestra los necesarios. El DTO es esa UI: filtra y presenta solo lo relevante para el frontend.
+      </div>
+
+      <div class="section-title">📚 Definición de Clase</div>
+      <div class="class-def"><strong>DTO (Data Transfer Object)</strong> — Clase simple que solo transporta datos entre capas. No tiene lógica de negocio. El método estático <code>fromDomain()</code> es un <em>factory method</em>: crea instancias a partir de otro objeto.</div>
+    </div>
+  </div>
+
+  <!-- ─── CourseController ─── -->
+  <div class="file-block" id="controller">
+    <div class="file-header">
+      <span class="file-icon">🌐</span>
+      <span class="file-name">CourseController.java</span>
+      <span class="file-layer layer-infra">Infra</span>
+    </div>
+    <div class="file-body">
+      <div class="section-title">¿Qué hace?</div>
+      <p class="desc">Adaptador de entrada HTTP. Recibe peticiones GET y POST, llama al <code>CourseUseCase</code> y transforma la respuesta en JSON. Todo está anotado con <code>@Operation</code> y <code>@Tag</code> para que Springdoc OpenAPI construya la documentación Swagger UI automáticamente.</p>
+
+      <pre><code><span class="ann">@Tag</span>(name = <span class="str">"Courses"</span>, description = <span class="str">"Endpoints para gestionar el catálogo de cursos"</span>)
+<span class="ann">@RestController</span>
+<span class="kw">public class</span> CourseController {
+
+    <span class="ann">@Operation</span>(summary = <span class="str">"Crear un curso nuevo"</span>)
+    <span class="ann">@PostMapping</span>
+    <span class="kw">public</span> ResponseEntity&lt;CourseResponse&gt; createCourse(
+        <span class="ann">@RequestBody</span> CourseRequest request) { ... }
+}</code></pre>
+
+    CourseCategory cat = parseCategory(category);
+    <span class="kw">return</span> ResponseEntity.ok(
+        courseUseCase.search(search, cat)
+            .stream().map(CourseResponse::fromDomain)
+            .collect(Collectors.toList())
+    );
+}</code></pre>
+
+      <div class="section-title">🎮 Analogía</div>
+      <div class="analogy">
+        <span class="analogy-badge">🚪 Resident Evil — Puerta del Raccoon Police Dept</span>
+        El controller es la <strong>puerta principal del RPD</strong>. Deja entrar a los sobrevivientes (peticiones HTTP), verifica quiénes son (parámetros), y los dirige al departamento correcto (UseCase). La puerta no mata zombies — solo controla el acceso.
+      </div>
+
+      <div class="section-title">📚 Definición de Clase</div>
+      <div class="class-def"><strong>@RestController (@Controller + @ResponseBody)</strong> — Toda respuesta de sus métodos se serializa a JSON automáticamente. <code>ResponseEntity&lt;T&gt;</code> da control sobre el código HTTP (200, 404, etc.) además del cuerpo.</div>
+    </div>
+  </div>
+
+  <!-- ─── BeanConfiguration ─── -->
+  <div class="file-block" id="bean-config">
+    <div class="file-header">
+      <span class="file-icon">🔧</span>
+      <span class="file-name">BeanConfiguration.java</span>
+      <span class="file-layer layer-config">Config</span>
+    </div>
+    <div class="file-body">
+      <div class="section-title">¿Qué hace?</div>
+      <p class="desc">El "pegamento" hexagonal. Crea los beans manualmente: primero el repositorio, luego lo inyecta en el servicio. Gracias a esta clase, el dominio NO necesita anotaciones de Spring.</p>
+
+      <pre><code><span class="ann">@Configuration</span>
+<span class="kw">public class</span> BeanConfiguration {
+
+    <span class="ann">@Bean</span>
+    <span class="kw">public</span> CourseRepositoryPort courseRepositoryPort() {
+        <span class="kw">return new</span> InMemoryCourseRepository();
+    }
+
+    <span class="ann">@Bean</span>
+    <span class="kw">public</span> CourseUseCase courseUseCase(CourseRepositoryPort repo) {
+        <span class="kw">return new</span> CourseService(repo);
+    }
+}</code></pre>
+
+      <div class="section-title">🎮 Analogía</div>
+      <div class="analogy">
+        <span class="analogy-badge">⚗️ Resident Evil — Laboratorio de Mezcla de Hierbas</span>
+        Para mezclar una hierba verde + roja + azul necesitas hacer el proceso en orden. <code>BeanConfiguration</code> es ese laboratorio: primero crea el repositorio (hierba base), luego lo mezcla con el servicio para producir el <strong>objeto final curado</strong> que Spring inyecta donde se necesita.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── CorsConfig ─── -->
+  <div class="file-block" id="cors">
+    <div class="file-header">
+      <span class="file-icon">🌍</span>
+      <span class="file-name">CorsConfig.java</span>
+      <span class="file-layer layer-config">Config</span>
+    </div>
+    <div class="file-body">
+      <div class="section-title">¿Qué hace?</div>
+      <p class="desc">Configura CORS (Cross-Origin Resource Sharing). Sin esto, el navegador bloquea las peticiones del frontend Angular (<code>localhost:4200</code>) al backend (<code>localhost:8080</code>) por estar en puertos diferentes.</p>
+
+      <pre><code>registry.addMapping(<span class="str">"/api/**"</span>)
+    .allowedOrigins(
+        <span class="str">"http://localhost:4200"</span>,
+        <span class="str">"https://static-years-354369.framer.app"</span>
+    )
+    .allowedMethods(<span class="str">"GET"</span>, <span class="str">"POST"</span>, <span class="str">"PUT"</span>, <span class="str">"DELETE"</span>);</code></pre>
+
+      <div class="section-title">🎮 Analogía</div>
+      <div class="analogy">
+        <span class="analogy-badge">🌫️ Silent Hill 2 — El Puente entre Mundos</span>
+        En Silent Hill, James cruza entre el mundo real y el mundo oxidado. Sin el puente (CORS), cada mundo está completamente aislado. <code>CorsConfig</code> es ese <strong>puente prohibido que habilitas tú</strong>: le dices al servidor quién puede cruzar y para qué.
+      </div>
+    </div>
+  </div>
+
+</main>
+</body>
+</html>

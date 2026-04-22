@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gitflow — Guía Completa</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
+
+    :root {
+      --bg: #0b0d14;
+      --surface: #111420;
+      --surface2: #181c2e;
+      --accent: #f472b6;
+      --accent2: #34d399;
+      --blue: #60a5fa;
+      --yellow: #fbbf24;
+      --orange: #fb923c;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --border: #1e2138;
+      --code-bg: #080b12;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    header {
+      background: radial-gradient(ellipse at 50% -20%, #2d1b69 0%, #0b0d14 65%);
+      text-align: center;
+      padding: 4rem 2rem 3rem;
+      border-bottom: 1px solid var(--border);
+    }
+    header .tag {
+      display: inline-block;
+      color: var(--accent);
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      border: 1px solid var(--accent);
+      padding: .3rem .8rem;
+      border-radius: 99px;
+      margin-bottom: 1.25rem;
+    }
+    header h1 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: .75rem;
+    }
+    header p { color: var(--muted); font-size: .95rem; }
+
+    /* LAYOUT */
+    main { max-width: 860px; margin: 0 auto; padding: 3rem 1.5rem; }
+
+    /* WARNING BOX */
+    .warning {
+      background: #1a1000;
+      border: 1px solid #854d0e;
+      border-left: 4px solid var(--yellow);
+      border-radius: 0 10px 10px 0;
+      padding: 1rem 1.25rem;
+      margin-bottom: 2rem;
+      font-size: .875rem;
+      color: #fef3c7;
+      line-height: 1.65;
+    }
+    .warning strong { color: var(--yellow); }
+
+    /* SECTION TITLE */
+    .section-title {
+      font-size: .72rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      margin: 2.5rem 0 1rem;
+    }
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* STEP */
+    .step-group { display: flex; flex-direction: column; gap: .75rem; margin-bottom: 2rem; }
+
+    .step {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding: .85rem 1.25rem;
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+    }
+    .step-num {
+      font-size: .75rem;
+      font-weight: 700;
+      background: var(--accent);
+      color: #fff;
+      width: 1.6rem; height: 1.6rem;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .step-label {
+      font-weight: 600;
+      font-size: .9rem;
+      flex: 1;
+    }
+    .step-badge {
+      font-size: .7rem;
+      font-weight: 700;
+      padding: .2rem .55rem;
+      border-radius: 99px;
+      text-transform: uppercase;
+    }
+    .badge-once  { background: #1a2a1a; color: var(--accent2); }
+    .badge-always { background: #1a1a2a; color: var(--blue); }
+    .badge-end   { background: #2a1a1a; color: var(--orange); }
+
+    .step-body {
+      padding: 1rem 1.25rem;
+    }
+    .step-desc {
+      font-size: .855rem;
+      color: var(--muted);
+      margin-bottom: .75rem;
+      line-height: 1.65;
+    }
+
+    /* CODE BLOCK */
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: .9rem 1.1rem;
+      overflow-x: auto;
+    }
+    code {
+      font-family: 'Fira Code', monospace;
+      font-size: .82rem;
+      line-height: 1.7;
+      color: #93c5fd;
+      display: block;
+    }
+    code .comment { color: #475569; }
+    code .cmd     { color: #34d399; }
+    code .flag    { color: #f472b6; }
+    code .str     { color: #a78bfa; }
+    code .branch  { color: #fbbf24; }
+
+    /* GITFLOW DIAGRAM */
+    .diagram {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      overflow-x: auto;
+    }
+    .diagram pre {
+      background: transparent;
+      border: none;
+      padding: 0;
+    }
+    .diagram code { color: #64748b; }
+    .diagram code .main-b  { color: #f472b6; }
+    .diagram code .dev-b   { color: #34d399; }
+    .diagram code .feat-b  { color: #60a5fa; }
+    .diagram code .tag-b   { color: #fbbf24; }
+
+    /* GITIGNORE BLOCK */
+    .gitignore-note {
+      background: #0a0f1a;
+      border: 1px solid #1e2a4a;
+      border-radius: 10px;
+      padding: 1.25rem;
+      margin-top: 1rem;
+    }
+    .gitignore-note .gi-title {
+      font-size: .72rem;
+      font-weight: 700;
+      color: var(--accent2);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      margin-bottom: .75rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <span class="tag">🌿 Gitflow</span>
+  <h1>Flujo de Git para Course Catalog API</h1>
+  <p>Crea el repo · trabaja con ramas · sube solo el código funcional</p>
+</header>
+
+<main>
+
+  <div class="warning">
+    <strong>⚠️ Importante antes de empezar:</strong> El <code>.gitignore</code> ya está configurado para ignorar todos los archivos HTML de apuntes (<code>ANOTACIONES_SPRING.html</code>, <code>CODIGO_Y_LOGICA.html</code>, <code>DISCURSO_PROYECTO.html</code>, <code>GITFLOW_APUNTES.html</code>). Solo el código funcional del backend llega a GitHub.
+  </div>
+
+  <!-- ── DIAGRAMA CONCEPTUAL ── -->
+  <div class="section-title">📊 Diagrama de ramas</div>
+  <div class="diagram">
+    <pre><code>
+<span class="main-b">main</span>  ────●─────────────────────────────────────────●  v1.0.0 (release)
+             \                                          /
+<span class="dev-b">develop</span>     ●───●────────────────────────────────●──●
+                  \                        /
+<span class="feat-b">feature/domain</span>    ●──●──●──●            /
+                                \        /
+<span class="feat-b">feature/infrastructure</span>          ●──●──●
+
+  <span class="tag-b">● commit</span>    Merge por Pull Request
+    </code></pre>
+  </div>
+
+  <!-- ── FASE 1: SETUP ── -->
+  <div class="section-title">🔧 Fase 1 — Configuración inicial (se hace UNA sola vez)</div>
+  <div class="step-group">
+
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">1</div>
+        <div class="step-label">Crear repositorio en GitHub</div>
+        <span class="step-badge badge-once">Una vez</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Ve a github.com → New Repository → Llámalo <strong>course-catalog-api</strong> → Selecciona <em>Private</em> (o Public) → <strong>NO</strong> agregues README ni .gitignore (ya los tenemos).</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">2</div>
+        <div class="step-label">Inicializar git en la carpeta local</div>
+        <span class="step-badge badge-once">Una vez</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Abre PowerShell en la carpeta <code>back_anajuli</code> y ejecuta:</p>
+        <pre><code><span class="comment"># Inicializa el repositorio git</span>
+<span class="cmd">git init</span>
+
+<span class="comment"># Configura la rama principal como "main"</span>
+<span class="cmd">git branch -M</span> <span class="branch">main</span>
+
+<span class="comment"># Conecta con GitHub (reemplaza USER con tu usuario)</span>
+<span class="cmd">git remote add origin</span> <span class="str">https://github.com/USER/course-catalog-api.git</span></code></pre>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">3</div>
+        <div class="step-label">Primer commit — código funcional base</div>
+        <span class="step-badge badge-once">Una vez</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">El <code>.gitignore</code> ya excluye los HTMLs. Este commit sube solo el proyecto funcional.</p>
+        <pre><code><span class="cmd">git add .</span>
+<span class="cmd">git commit -m</span> <span class="str">"chore: initial project setup - Gradle + Spring Boot 3.2.5"</span>
+<span class="cmd">git push -u origin</span> <span class="branch">main</span></code></pre>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">4</div>
+        <div class="step-label">Crear rama develop</div>
+        <span class="step-badge badge-once">Una vez</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc"><code>develop</code> es la rama de integración donde se juntan todas las features antes de ir a <code>main</code>.</p>
+        <pre><code><span class="cmd">git checkout -b</span> <span class="branch">develop</span>
+<span class="cmd">git push -u origin</span> <span class="branch">develop</span></code></pre>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── FASE 2: FLUJO DIARIO ── -->
+  <div class="section-title">🔄 Fase 2 — Flujo diario (cada nueva funcionalidad)</div>
+  <div class="step-group">
+
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">5</div>
+        <div class="step-label">Crear rama feature desde develop</div>
+        <span class="step-badge badge-always">Siempre</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Cada funcionalidad nueva va en su propia rama. Nunca trabajes directo en <code>main</code> o <code>develop</code>.</p>
+        <pre><code><span class="comment"># Asegúrate de estar en develop y actualizado</span>
+<span class="cmd">git checkout</span> <span class="branch">develop</span>
+<span class="cmd">git pull origin</span> <span class="branch">develop</span>
+
+<span class="comment"># Crea la rama de feature (ej: dominio, infraestructura, cors, etc.)</span>
+<span class="cmd">git checkout -b</span> <span class="branch">feature/domain-model</span>
+<span class="comment"># Otros ejemplos:</span>
+<span class="comment"># feature/course-use-case</span>
+<span class="comment"># feature/in-memory-repository</span>
+<span class="comment"># feature/rest-controller</span>
+<span class="comment"># feature/cors-configuration</span></code></pre>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">6</div>
+        <div class="step-label">Trabajar y hacer commits en la feature</div>
+        <span class="step-badge badge-always">Siempre</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Trabaja normalmente. Usa mensajes de commit con prefijos convencionales:</p>
+        <pre><code><span class="cmd">git add .</span>
+<span class="cmd">git commit -m</span> <span class="str">"feat: add Course domain entity with Builder pattern"</span>
+
+<span class="comment"># Prefijos convencionales:</span>
+<span class="comment"># feat:   nueva funcionalidad</span>
+<span class="comment"># fix:    corrección de bug</span>
+<span class="comment"># refactor: refactorización sin cambio de comportamiento</span>
+<span class="comment"># chore:  configuración, dependencias, .gitignore</span>
+<span class="comment"># docs:   solo documentación (NO subimos los HTML)</span></code></pre>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">7</div>
+        <div class="step-label">Subir la rama y mergear a develop</div>
+        <span class="step-badge badge-always">Siempre</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Sube la rama y crea un Pull Request en GitHub hacia <code>develop</code>. O hazlo directo por terminal:</p>
+        <pre><code><span class="comment"># Subir la rama feature</span>
+<span class="cmd">git push origin</span> <span class="branch">feature/domain-model</span>
+
+<span class="comment"># Mergear a develop localmente (si no usas PR en GitHub)</span>
+<span class="cmd">git checkout</span> <span class="branch">develop</span>
+<span class="cmd">git merge --no-ff</span> <span class="branch">feature/domain-model</span>
+<span class="cmd">git push origin</span> <span class="branch">develop</span>
+
+<span class="comment"># Borrar la rama feature (ya fue mergeada)</span>
+<span class="cmd">git branch -d</span> <span class="branch">feature/domain-model</span></code></pre>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── FASE 3: RELEASE ── -->
+  <div class="section-title">🚀 Fase 3 — Release (cuando el proyecto está completo)</div>
+  <div class="step-group">
+
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">8</div>
+        <div class="step-label">Mergear develop → main + crear tag de versión</div>
+        <span class="step-badge badge-end">Al finalizar</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Cuando todas las features están en <code>develop</code> y probadas, se fusionan a <code>main</code> y se etiqueta la versión.</p>
+        <pre><code><span class="comment"># Ir a main y mergear develop</span>
+<span class="cmd">git checkout</span> <span class="branch">main</span>
+<span class="cmd">git merge --no-ff</span> <span class="branch">develop</span>
+
+<span class="comment"># Crear tag de versión</span>
+<span class="cmd">git tag -a</span> <span class="str">v1.0.0</span> <span class="flag">-m</span> <span class="str">"release: v1.0.0 - Course Catalog API completo"</span>
+
+<span class="comment"># Subir main y el tag</span>
+<span class="cmd">git push origin</span> <span class="branch">main</span>
+<span class="cmd">git push origin</span> <span class="flag">--tags</span></code></pre>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── GITIGNORE RECORDATORIO ── -->
+  <div class="section-title">🚫 Qué ignora el .gitignore</div>
+  <div class="gitignore-note">
+    <div class="gi-title">Archivos excluidos del repositorio (nunca subirán a GitHub):</div>
+    <pre><code><span class="comment"># Apuntes de estudio (ignorados)</span>
+ANOTACIONES_SPRING.html
+CODIGO_Y_LOGICA.html
+DISCURSO_PROYECTO.html
+GITFLOW_APUNTES.html
+
+<span class="comment"># Gradle build</span>
+.gradle/
+build/
+
+<span class="comment"># IDE</span>
+.idea/
+
+<span class="comment"># OS</span>
+.DS_Store
+Thumbs.db</code></pre>
+  </div>
+
+  <!-- ── VERIFICAR QUÉ SE SUBIÓ ── -->
+  <div class="section-title">✅ Verificar qué archivos subirán antes de hacer push</div>
+  <div class="step-group">
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">💡</div>
+        <div class="step-label">Comando de verificación</div>
+        <span class="step-badge badge-always">Tip</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Antes de hacer commit, verifica qué archivos va a rastrear git:</p>
+        <pre><code><span class="comment"># Ver qué archivos están siendo rastreados (deben ser solo código)</span>
+<span class="cmd">git status</span>
+
+<span class="comment"># Ver exactamente qué archivos git ESTÁ rastreando (excluidos los ignorados)</span>
+<span class="cmd">git ls-files</span>
+
+<span class="comment"># Verificar que un archivo específico está ignorado</span>
+<span class="cmd">git check-ignore -v</span> CODIGO_Y_LOGICA.html</code></pre>
+      </div>
+    </div>
+  </div>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentación API: Swagger UI y Arquitectura</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #252836;
+      --accent: #ff007f;
+      --accent2: #7928ca;
+      --warn: #ff6b6b;
+      --success: #00d4aa;
+      --text: #e8eaf0;
+      --muted: #8b8fa8;
+      --border: #2e3248;
+      --tag-bg: #1e2040;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    header p {
+      color: var(--muted);
+      margin-top: .5rem;
+      font-size: .95rem;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem 2rem;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+    
+    .card.success::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px; height: 100%;
+      background: var(--success);
+      border-radius: 4px 0 0 4px;
+    }
+    
+    .card.info::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px; height: 100%;
+      background: linear-gradient(to bottom, var(--accent), var(--accent2));
+      border-radius: 4px 0 0 4px;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    p {
+      line-height: 1.6;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    ul, ol {
+      margin-left: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+
+    code {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9em;
+      color: #fbbf24;
+      background: var(--tag-bg);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+    }
+
+    .code-block {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9rem;
+      color: var(--success);
+    }
+
+    .step-badge {
+      display: inline-block;
+      background: var(--accent2);
+      color: white;
+      width: 24px;
+      height: 24px;
+      text-align: center;
+      border-radius: 50%;
+      font-weight: bold;
+      margin-right: 10px;
+    }
+
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>📜 Swagger y Arquitectura Hexagonal</h1>
+  <p>El manual definitivo para documentar tu API automáticamente sin romper las reglas de Clean Architecture.</p>
+</header>
+
+<div class="container">
+
+  <!-- SECCIÓN ARQUITECTURA -->
+  <div class="card success">
+    <h2>🛡️ 1. Mantenimiento de la Arquitectura Hexagonal</h2>
+    <p>
+      ¡No te preocupes! <strong>La Arquitectura Hexagonal se mantiene completamente intacta y purista.</strong>
+    </p>
+    <p>
+      En esta arquitectura, la regla de oro es que el <strong>Dominio</strong> (el corazón del hexágono) no puede conocer NADA sobre la infraestructura (Base de datos, Frameworks Web, o Librerías de Documentación). 
+    </p>
+    <ul>
+      <li><code>Course</code>, <code>CourseUseCase</code> y <code>CourseService</code> siguen sin tener ni una sola anotación de Spring, de Swagger, ni de Bases de Datos. Son clases de Java puro.</li>
+      <li>Todas las anotaciones de documentación de Swagger (<code>@Tag</code>, <code>@Operation</code>, <code>@Schema</code>) se colocaron <strong>exclusivamente en la capa de Infraestructura</strong> (en el <code>CourseController</code> y en los DTOs <code>CourseRequest</code> y <code>CourseResponse</code>).</li>
+    </ul>
+    <p>De esta manera, si mañana decides cambiar Swagger por otra herramienta, tu lógica de negocio y tu dominio ni se enteran. ¡Tu arquitectura está segura!</p>
+  </div>
+
+  <!-- SECCIÓN ¿QUÉ SE NECESITA? -->
+  <div class="card info">
+    <h2>📖 2. ¿Qué se necesita para generar Swagger Automáticamente?</h2>
+    <p>
+      Históricamente se usaba una librería llamada <strong>SpringFox</strong>. Sin embargo, SpringFox dejó de actualizarse hace varios años y <strong>es incompatible con Spring Boot 3</strong> (ya que Spring Boot 3 cambió internamente la paquetería de <code>javax.*</code> a <code>jakarta.*</code>).
+    </p>
+    <p>
+      La herramienta oficial, moderna y estándar hoy en día para lograr exactamente el mismo resultado (una interfaz Swagger UI) se llama <strong>Springdoc-OpenAPI</strong>.
+    </p>
+    <p>
+      Springdoc escanea automáticamente tus controladores (clases con <code>@RestController</code>) al iniciar la aplicación. Lee tus rutas (<code>@GetMapping</code>, <code>@PostMapping</code>) y tus parámetros, y construye de forma automática un documento JSON estándar llamado OpenAPI, que luego renderiza en la famosa página visual interactiva.
+    </p>
+  </div>
+
+  <!-- SECCIÓN PASOS -->
+  <div class="card info">
+    <h2>🚀 3. Pasos para implementarlo de forma automática</h2>
+    <p>A continuación te detallo los pasos exactos que he seguido en tu código para que el proceso sea completamente automático:</p>
+    
+    <div>
+      <p><span class="step-badge">1</span> <strong>Añadir la Dependencia:</strong></p>
+      <p>En el archivo <code>build.gradle</code>, en el bloque de dependencias, agregamos la librería oficial. Esto le dice a Spring Boot que auto-configure todo el ecosistema de Swagger.</p>
+      <div class="code-block">
+implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
+      </div>
+    </div>
+
+    <div>
+      <p><span class="step-badge">2</span> <strong>Anotar el Controlador:</strong></p>
+      <p>En tu <code>CourseController</code>, utilizamos la anotación <code>@Tag</code> para ponerle un título a la sección, y <code>@Operation</code> arriba de cada método para describir qué hace ese endpoint específico.</p>
+      <div class="code-block">
+@Tag(name = "Courses", description = "Endpoints para gestionar cursos")
+public class CourseController {
+
+    @GetMapping
+    @Operation(summary = "Obtener cursos", description = "Lista todos los cursos...")
+    public ResponseEntity&lt;...&gt; getCourses(...) { ... }
+}
+      </div>
+    </div>
+
+    <div>
+      <p><span class="step-badge">3</span> <strong>Anotar los Modelos (DTOs):</strong></p>
+      <p>Para que la documentación de Swagger le explique al frontend (Angular/React) qué campos enviar y recibir, decoramos los DTOs de infraestructura (<code>CourseRequest</code>, <code>CourseResponse</code>) con <code>@Schema</code>.</p>
+      <div class="code-block">
+public class CourseRequest {
+    @Schema(description = "Título del curso", example = "Curso de Java")
+    private String title;
+}
+      </div>
+    </div>
+
+    <div>
+      <p><span class="step-badge">4</span> <strong>¡Arrancar la aplicación!</strong></p>
+      <p>No tienes que hacer nada más. La magia de la autoconfiguración de Spring Boot hace que la interfaz gráfica se genere sola. Al darle "Play" a tu aplicación en IntelliJ, simplemente abres tu navegador web en:</p>
+      <div class="code-block">
+http://localhost:8080/swagger-ui.html
+      </div>
+      <p>Y verás toda tu API documentada, interactiva y lista para enviar pruebas (peticiones POST, GET) sin usar Postman.</p>
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>
