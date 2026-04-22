@@ -70,4 +70,12 @@ public class CourseService implements CourseUseCase {
     public Optional<Course> findById(Long id) {
         return courseRepositoryPort.findById(id);
     }
+
+    @Override
+    public Course createCourse(Course course) {
+        if (course.getTitle() == null || course.getTitle().isBlank()) {
+            throw new IllegalArgumentException("Course title is required");
+        }
+        return courseRepositoryPort.save(course);
+    }
 }

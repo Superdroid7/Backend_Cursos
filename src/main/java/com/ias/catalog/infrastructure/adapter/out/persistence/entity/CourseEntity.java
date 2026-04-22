@@ -26,4 +26,6 @@ public class CourseEntity {
     private String description;
     private String category;
     private String imageUrl;
+    private String themes;
+    private String link;
 }

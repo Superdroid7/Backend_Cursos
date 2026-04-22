@@ -4,6 +4,7 @@ import com.ias.catalog.domain.model.Course;
 import com.ias.catalog.domain.model.CourseCategory;
 import com.ias.catalog.domain.port.out.CourseRepositoryPort;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
  */
 public class InMemoryCourseRepository implements CourseRepositoryPort {
 
-    private static final List<Course> COURSES = List.of(
+    private static final List<Course> COURSES = new ArrayList<>(List.of(
             Course.builder()
                     .id(1L)
                     .title("Learn Python")
@@ -66,8 +67,10 @@ public class InMemoryCourseRepository implements CourseRepositoryPort {
                     .description("Testing en Java: assertions, mocks con Mockito, TDD y cobertura de código.")
                     .category(CourseCategory.TESTING)
                     .imageUrl("https://junit.org/junit5/assets/img/junit5-logo.png")
+                    .themes("Java, JUnit, Mockito")
+                    .link("https://junit.org/junit5/")
                     .build()
-    );
+    ));
 
     @Override
     public List<Course> findAll() {
@@ -95,5 +98,22 @@ public class InMemoryCourseRepository implements CourseRepositoryPort {
         return COURSES.stream()
                 .filter(c -> c.getId().equals(id))
                 .findFirst();
+    }
+
+    @Override
+    public Course save(Course course) {
+        // Simple mock ID generation
+        Long nextId = COURSES.stream().mapToLong(Course::getId).max().orElse(0) + 1;
+        Course newCourse = Course.builder()
+                .id(course.getId() != null ? course.getId() : nextId)
+                .title(course.getTitle())
+                .description(course.getDescription())
+                .category(course.getCategory())
+                .imageUrl(course.getImageUrl())
+                .themes(course.getThemes())
+                .link(course.getLink())
+                .build();
+        COURSES.add(newCourse);
+        return newCourse;
     }
 }

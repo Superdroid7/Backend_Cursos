@@ -21,4 +21,6 @@ public interface CourseRepositoryPort {
     List<Course> findByCategory(CourseCategory category);
 
     Optional<Course> findById(Long id);
+
+    Course save(Course course);
 }

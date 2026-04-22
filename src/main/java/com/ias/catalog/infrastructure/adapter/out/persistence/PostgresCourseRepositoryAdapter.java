@@ -47,14 +47,36 @@ public class PostgresCourseRepositoryAdapter implements CourseRepositoryPort {
         return courseJpaRepository.findById(id).map(this::toDomainModel);
     }
 
+    @Override
+    public Course save(Course course) {
+        CourseEntity entity = toEntity(course);
+        CourseEntity savedEntity = courseJpaRepository.save(entity);
+        return toDomainModel(savedEntity);
+    }
+
     // Mapper manual (Entity -> Domain)
     private Course toDomainModel(CourseEntity entity) {
         return Course.builder()
                 .id(entity.getId())
                 .title(entity.getTitle())
                 .description(entity.getDescription())
-                .category(CourseCategory.valueOf(entity.getCategory()))
+                .category(entity.getCategory() != null ? CourseCategory.valueOf(entity.getCategory()) : null)
                 .imageUrl(entity.getImageUrl())
+                .themes(entity.getThemes())
+                .link(entity.getLink())
+                .build();
+    }
+
+    // Mapper manual (Domain -> Entity)
+    private CourseEntity toEntity(Course course) {
+        return CourseEntity.builder()
+                .id(course.getId())
+                .title(course.getTitle())
+                .description(course.getDescription())
+                .category(course.getCategory() != null ? course.getCategory().name() : null)
+                .imageUrl(course.getImageUrl())
+                .themes(course.getThemes())
+                .link(course.getLink())
                 .build();
     }
 }

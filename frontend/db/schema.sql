@@ -12,6 +12,8 @@ CREATE TABLE course (
     description TEXT    NOT NULL,
     category    TEXT    NOT NULL,
     image_url   TEXT,
+    themes      TEXT,
+    link        TEXT,
 
     CONSTRAINT chk_category CHECK (category IN ('PROGRAMMING', 'DESIGN', 'CLOUD', 'TESTING'))
 );

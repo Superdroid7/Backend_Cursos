@@ -35,21 +35,18 @@ Thumbs.db
 *.log
 
 # ========================
-# APUNTES (NO subir al repo) - AHORA COMENTADOS PARA SUBIRLOS
+# APUNTES (NO subir al repo)
+# Solo son archivos de estudio personal.
 # ========================
-# ANOTACIONES_SPRING.html
-# CODIGO_Y_LOGICA.html
-# DISCURSO_PROYECTO.html
-# GITFLOW_APUNTES.html
-# DOCUMENTACION_PROYECTO.html
-# DEFINICIONES_PROYECTO.html
-# GUIA_EJECUCION_Y_GITHUB.md
-# GUIA_EXPOSICION.html
-# APUNTES_BACKEND.html
-# GUIA_EJECUCION_INTELLIJ.html
-# *.apuntes.html
-# DOCUMENTACION_SWAGGER.html
-
-# Ignorar la nueva funcionalidad temporalmente para esta rama
-src/main/java/com/ias/catalog/infrastructure/adapter/in/web/dto/CourseRequest.java
-build_output.txt
+ANOTACIONES_SPRING.html
+CODIGO_Y_LOGICA.html
+DISCURSO_PROYECTO.html
+GITFLOW_APUNTES.html
+DOCUMENTACION_PROYECTO.html
+DEFINICIONES_PROYECTO.html
+GUIA_EJECUCION_Y_GITHUB.md
+GUIA_EXPOSICION.html
+APUNTES_BACKEND.html
+GUIA_EJECUCION_INTELLIJ.html
+*.apuntes.html
+DOCUMENTACION_SWAGGER.html
